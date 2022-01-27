@@ -1,9 +1,9 @@
 import './App.css';
-import Authorization from './components/Authorization/Authorization';
+import Login from './pages/login/Login';
 
 function App() {
   return (
-    <Authorization/>
+    <Login/>
   );
 }
 
