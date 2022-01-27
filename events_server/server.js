@@ -1,10 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Router = require("./routes")
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
+
+const corsOptions = {
+  origin: 'http://localhost:3001',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions))
 
 const username = "ebeliavskaja";
 const password = "Emongo1!";
