@@ -7,11 +7,17 @@ export const LoginBox = styled('div')({
 });
 
 export const LoginTextField = styled(TextField)({
-    fontSize: '10px',
+    fontSize: '8px',
     marginBottom: '10px'
 });
 
 export const SubmitButton = styled(Button)({
     width: '100px',
-    margin: 'auto'
+    margin: 'auto',
+    color: '#ffffff',
+    backgroundColor: '#2196f3',
+    '&.Mui-disabled': {
+        backgroundColor: '#83c3f7',
+        color: '#ffffff'
+    }
 });

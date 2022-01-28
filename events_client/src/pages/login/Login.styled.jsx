@@ -8,10 +8,9 @@ export const ContainerBox = styled('div')({
   });
 
 export const LoginCard = styled('div')({
-    maxWidth: '350px', 
+    maxWidth: '300px', 
     display: 'flex', 
-    flexDirection: 'column', 
-    alignContent: 'center', 
+    flexDirection: 'column',
     padding: '20px'
 });
 
@@ -22,5 +21,8 @@ export const LoginNavigationBox = styled('div')({
 });
 
 export const LoginButton = styled(Button)({
-
+    color: '#2196f3',
+    '&.Mui-disabled': {
+        color: '#83c3f7'
+    }
 });
