@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
     LoginTextField,
     SubmitButton,
-    LoginBox
+    LoginBox,
+    AuthForm
 } from './Registration.styled';
 import { useForm } from "react-hook-form";
 import login from '../../services/api/axios';
@@ -42,7 +43,7 @@ export default function Registration() {
 
     return ( 
         <LoginBox>
-            <form onSubmit={handleSubmit}>
+            <AuthForm onSubmit={handleSubmit}>
                 <LoginTextField
                 {...register('email', {
                     required: "Please enter email",
@@ -73,11 +74,11 @@ export default function Registration() {
                 <div style={{height: 20}}>
                     {errors?.password && <p>{errors?.password?.message || "Error!"}</p>}
                 </div>
-                {/* <LoginTextField
+                <LoginTextField
                     label="Confirm password"
-                /> */}
+                />
                 <SubmitButton type="submit" disabled={!isValid} variant="contained" size='small' onClick={handleSubmit}>Sign up</SubmitButton>
-            </form>
+            </AuthForm>
         </LoginBox>
     )
 }

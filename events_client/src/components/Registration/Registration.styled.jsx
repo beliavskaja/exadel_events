@@ -2,8 +2,7 @@ import { styled, Button, TextField } from "@mui/material";
 
 export const LoginBox = styled('div')({
     display: 'flex', 
-    flexDirection: 'column', 
-    alignContent: 'center'
+    flexDirection: 'column'
 });
 
 export const LoginTextField = styled(TextField)({
@@ -13,5 +12,16 @@ export const LoginTextField = styled(TextField)({
 
 export const SubmitButton = styled(Button)({
     width: '100px',
-    margin: 'auto'
+    margin: 'auto',
+    color: '#ffffff',
+    backgroundColor: '#2196f3',
+    '&.Mui-disabled': {
+        backgroundColor: '#83c3f7',
+        color: '#ffffff'
+    }
 });
+
+export const AuthForm = styled('div')({
+    display: 'flex',
+    flexDirection: 'column'
+})
