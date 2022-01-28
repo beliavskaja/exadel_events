@@ -7,7 +7,7 @@ export const LoginBox = styled('div')({
 });
 
 export const LoginTextField = styled(TextField)({
-    fontSize: '10px',
+    fontSize: '8px',
     marginBottom: '10px'
 });
 

@@ -55,9 +55,10 @@ export default function Registration() {
                     label="Email"
                     value={formValue.email}
                     onChange={handleChange}
+                    size="small"
                 />
-                <div style={{height: 20}}>
-                    {errors?.email && <p>{errors?.email?.message || "Error!"}</p>}
+                <div>
+                    {errors?.email && <p style={{height: 10, margin: '5px', fontSize: '10px', color: 'red'}}>{errors?.email?.message || "Error!"}</p>}
                 </div>
                 <LoginTextField
                 {...register('password', {
@@ -70,12 +71,14 @@ export default function Registration() {
                     label="Password"
                     value={formValue.password}
                     onChange={handleChange}
+                    size="small"
                 />
-                <div style={{height: 20}}>
-                    {errors?.password && <p>{errors?.password?.message || "Error!"}</p>}
+                <div>
+                    {errors?.password && <p style={{height: 10, margin: '5px', fontSize: '10px', color: 'red'}}>{errors?.password?.message || "Error!"}</p>}
                 </div>
                 <LoginTextField
                     label="Confirm password"
+                    size="small"
                 />
                 <SubmitButton type="submit" disabled={!isValid} variant="contained" size='small' onClick={handleSubmit}>Sign up</SubmitButton>
             </AuthForm>
