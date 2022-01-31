@@ -1,7 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Router = require("./routes")
+const Router = require("./routes/user.routes");
 const cors = require('cors');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 
@@ -13,13 +15,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-
-const username = "ebeliavskaja";
-const password = "Emongo1!";
-const cluster = "exadelevents.2zxar";
-const dbname = "exadelevents";
-
-mongoose.connect(`mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority`,
+mongoose.connect(`mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_KEY}@${process.env.DB_CLUSTER}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
