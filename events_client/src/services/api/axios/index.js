@@ -1,9 +1,11 @@
-import axios from "axios"
+import axios from "axios";
+import Axios from "axios";
 
 export default function login(formValue){
+    Axios.defaults.baseURL = "http://localhost:3000/";
 
     axios
-    .post('http://localhost:3000/add_user', formValue)
+    .post('add_user', formValue)
     .then((response) => {
         console.log(response.data);
     })
@@ -12,7 +14,7 @@ export default function login(formValue){
     });
 
     axios
-    .get('http://localhost:3000/users')
+    .get('users')
     .then((response) => {
         console.log(response.data);
     }).catch((error) => {
