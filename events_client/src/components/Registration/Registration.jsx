@@ -7,9 +7,22 @@ import {
 } from './Registration.styled';
 import { useForm } from "react-hook-form";
 import login from '../../services/api/axios';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 
 export default function Registration() {
+    const formSchema = Yup.object().shape({
+        password: Yup.string()
+          .required("Password is required")
+          .min(6, "Password length should be at least 4 characters")
+          .max(12, "Password cannot exceed more than 12 characters"),
+        passwordConfirm: Yup.string()
+          .required("Confirm Password is required")
+          .min(6, "Password length should be at least 4 characters")
+          .max(12, "Password cannot exceed more than 12 characters")
+          .oneOf([Yup.ref("password")], "Passwords do not match")
+      });
     
     const {
         register,
@@ -19,7 +32,8 @@ export default function Registration() {
         },
         reset,
     } = useForm({
-        mode: "onBlur"
+        mode: "onBlur",
+        resolver: yupResolver(formSchema)
     });
 
     const [formValue, setformValue] = useState({
@@ -61,13 +75,8 @@ export default function Registration() {
                     {errors?.email && <p style={{height: 10, margin: '5px', fontSize: '10px', color: 'red'}}>{errors?.email?.message || "Error!"}</p>}
                 </div>
                 <LoginTextField
-                {...register('password', {
-                    required: "Please enter password",
-                    minLength: {
-                        value: 8,
-                        message: "Password must contain at least 8 characters"
-                    }
-                })}
+                {...register('password')}
+                    type="password" 
                     label="Password"
                     value={formValue.password}
                     onChange={handleChange}
@@ -77,6 +86,8 @@ export default function Registration() {
                     {errors?.password && <p style={{height: 10, margin: '5px', fontSize: '10px', color: 'red'}}>{errors?.password?.message || "Error!"}</p>}
                 </div>
                 <LoginTextField
+                {...register('passwordConfirm')}
+                    type="password" 
                     label="Confirm password"
                     size="small"
                 />
