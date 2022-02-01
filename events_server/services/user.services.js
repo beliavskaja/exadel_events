@@ -3,9 +3,11 @@ const passwordHash = require('password-hash');
 
 exports.createUser = async(email, password) => {
     const user = new userModel({
-        email, password: passwordHash.generate(password)
-    })
-    await user.save()
+        email, 
+        password: passwordHash.generate(password), 
+        roles: ['ROLE_SUBSCRIBER']
+    });
+    return await user.save();
 };
 
 exports.getUser = async() => {
