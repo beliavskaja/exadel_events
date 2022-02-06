@@ -6,6 +6,12 @@ export const LoginBox = styled('div')({
     alignContent: 'center'
 });
 
+export const LoginForm = styled('div')({
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignContent: 'center'
+});
+
 export const LoginTextField = styled(TextField)({
     fontSize: '8px',
     marginBottom: '10px'
