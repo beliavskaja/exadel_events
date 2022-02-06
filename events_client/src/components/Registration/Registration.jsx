@@ -6,9 +6,10 @@ import {
     AuthForm
 } from './Registration.styled';
 import { useForm } from "react-hook-form";
-import login from '../../services/api/axios';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import registerUser from '../../services/api/axios/register.api';
+import getUsers from '../../services/api/axios/getUsers.api';
 
 
 export default function Registration() {
@@ -42,8 +43,7 @@ export default function Registration() {
       });
 
     const handleSubmit = (event) => {
-        login(formValue);
-        console.log(formValue)
+        registerUser(formValue);
         event.preventDefault();
         reset();
     }

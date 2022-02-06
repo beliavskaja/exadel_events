@@ -8,8 +8,13 @@ exports.createUser = async(email, password) => {
         roles: ['ROLE_SUBSCRIBER']
     });
     return await user.save();
+    // throw new Error('Sorry, something went wrong');
 };
 
-exports.getUser = async() => {
-    await userModel.find({});
+exports.getUserByEmail = async(email) => {
+    return await userModel.findOne({email: email});
+};
+
+exports.isPasswordValid = (user, password) => {
+    return passwordHash.verify(password, user.password);
 };

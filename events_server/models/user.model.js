@@ -12,9 +12,12 @@ const UserSchema = new mongoose.Schema({
   roles: [{
     type: String,
     required: true,
-  }]
+  }],
+  token: { 
+    type: String 
+  },
 });
 
-const User = mongoose.model("AuthUser", UserSchema);
+const User = mongoose.model("Users", UserSchema);
 
 module.exports = User;
