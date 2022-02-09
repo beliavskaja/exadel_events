@@ -30,6 +30,10 @@ db.once("open", function () {
 
 app.use(Router);
 
-app.listen(3000, () => {
+const { API_PORT } = process.env;
+const port = process.env.PORT || API_PORT;
+
+app.listen(port, () => {
   console.log("Server is running at port 3000");
 });
+
