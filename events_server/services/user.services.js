@@ -11,6 +11,10 @@ exports.createUser = async(email, password) => {
     // throw new Error('Sorry, something went wrong');
 };
 
+exports.getUsers = async() => {
+    return await userModel.find({});
+};
+
 exports.getUserByEmail = async(email) => {
     return await userModel.findOne({email: email});
 };

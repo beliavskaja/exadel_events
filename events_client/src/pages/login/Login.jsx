@@ -8,7 +8,7 @@ import {
     LoginButton, 
 } from './Login.styled';
 
-export default function Login() {
+export default function Login({storeUser}) {
     const [showRegistration, setShowRegistration] = useState(false);
     const onClick = () => setShowRegistration(!showRegistration);
 
@@ -16,10 +16,10 @@ export default function Login() {
       <ContainerBox>
                 <LoginCard>
                     <LoginNavigationBox>
-                        <LoginButton disabled={!showRegistration} onClick={ onClick} variant="text">Sign in</LoginButton>
-                        <LoginButton disabled={showRegistration} onClick={ onClick} variant="text">Sign up</LoginButton>
+                        <LoginButton disabled={!showRegistration} onClick={onClick} variant="text">Sign in</LoginButton>
+                        <LoginButton disabled={showRegistration} onClick={onClick} variant="text">Sign up</LoginButton>
                     </LoginNavigationBox>
-                    { !showRegistration ? <Authorization/> :
+                    { !showRegistration ? <Authorization storeUser={storeUser}/> :
                     <Registration/> }
                 </LoginCard>
       </ContainerBox>
