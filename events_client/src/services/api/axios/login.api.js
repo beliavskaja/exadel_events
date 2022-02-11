@@ -4,10 +4,10 @@ import Axios from "axios";
 Axios.defaults.baseURL = "http://localhost:3000/";
 
 export default function login(formValue){
-    axios
+    return axios
     .post('login', formValue)
     .then((response) => {
-        console.log(response.data);
+        return response;
     }).catch((error) => {
         console.error(error);
     });

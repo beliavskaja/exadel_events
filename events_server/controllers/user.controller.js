@@ -39,7 +39,7 @@ exports.loginUser = async (request, response) => {
       );
       user.token = token;
       user.save();
-      response.send(token);
+      response.send(user);
     } else {
       response.send("Not Allowed");
     }
