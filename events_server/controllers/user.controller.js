@@ -31,15 +31,17 @@ exports.loginUser = async (request, response) => {
     }
     if (UserServices.isPasswordValid(user, request.body.password)) {
       const token = jwt.sign(
-        { user_id: user.id, email: request.body.email },
+        {
+          user_id: user.id,
+          email: request.body.email,
+          roles: [],
+        },
         process.env.TOKEN_KEY,
         {
           expiresIn: "2h",
         }
       );
-      user.token = token;
-      user.save();
-      response.send(user);
+      response.send({ user, token });
     } else {
       response.send("Not Allowed");
     }

@@ -1,13 +1,14 @@
+import { Button } from '@mui/material';
 import React from 'react';
-// import { } from './Home.styled';
+import { Header } from './Home.styled';
 
 export default function Home ({ logout, user }) {
     return (
-      <div>
-        <h2>Hello</h2>
-        <div className="logout_button" onClick={() => logout()}>
+      <Header>
+        <h2>Home Page</h2>
+        <Button variant="contained" onClick={() => logout()}>
           logout
-        </div>
-      </div>
+        </Button>
+      </Header>
     );
   };

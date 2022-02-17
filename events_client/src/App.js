@@ -1,32 +1,37 @@
-import { useState, useEffect } from 'react';
-import Login from './pages/login/Login';
-import Home from './pages/home/Home';
-import getUsers from './services/api/axios/getUsers.api';
+import { useState, useEffect } from "react";
+import Login from "./pages/login/Login";
+import Home from "./pages/home/Home";
+import jwt_decode from "jwt-decode";
+import { AuthContext } from "./hooks/context";
 
 function App() {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
-  useEffect(async() => {
+  useEffect(() => {
     const authKey = sessionStorage.getItem("sessionKey");
     if (authKey) {
-      const users = await getUsers();
-      console.log(users);
-      const authUser = users ? users.find(user => user.token === authKey) : null;
+      const decoded = jwt_decode(authKey);
+      console.log(decoded);
+      const authUser = decoded.user_id;
       if (authUser) {
         setUser(authUser);
       }
     }
   }, []);
 
-  return (
-    user ? (
-    <Home logout = {() => {
-      setUser(null)
-      sessionStorage.setItem("sessionKey", null)
-    }} user = {user}/>
-    ) : (
-    <Login storeUser = {(userObj) => setUser(userObj)}/>
-    )
+  return user ? (
+    <Home
+      logout={() => {
+        setUser(null);
+        sessionStorage.setItem("sessionKey", null);
+      }}
+      user={user}
+    />
+  ) : (
+    <AuthContext.Provider value={{ token, setToken }}>
+      <Login storeUser={(userObj) => setUser(userObj)} />
+    </AuthContext.Provider>
   );
 }
 
