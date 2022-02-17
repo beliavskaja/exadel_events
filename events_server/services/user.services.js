@@ -1,5 +1,6 @@
 const userModel = require("../models/user.model");
 const passwordHash = require('password-hash');
+const { request } = require("express");
 
 exports.createUser = async(email, password) => {
     const user = new userModel({

@@ -7,7 +7,7 @@ export default function login(formValue){
     return axios
     .post('login', formValue)
     .then((response) => {
-        return response;
+        return response.data;
     }).catch((error) => {
         console.error(error);
     });
