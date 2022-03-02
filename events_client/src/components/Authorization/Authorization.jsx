@@ -8,6 +8,7 @@ import {
 import { useForm } from "react-hook-form";
 import login from "../../services/api/axios/login.api";
 import { AuthContext } from "../../hooks/context";
+import { useNavigate } from "react-router-dom";
 
 export default function Authorization({ storeUser }) {
   const {
@@ -23,12 +24,15 @@ export default function Authorization({ storeUser }) {
 
   const { setToken } = useContext(AuthContext);
 
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     login(formValue).then(({ user, token }) => {
       sessionStorage.setItem("sessionKey", token);
       setToken(token);
       storeUser(user);
+      navigate('/events');
     });
     reset();
   };
