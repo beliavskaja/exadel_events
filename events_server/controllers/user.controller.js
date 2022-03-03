@@ -1,4 +1,3 @@
-const { response } = require("express");
 const UserServices = require("../services/user.services");
 const jwt = require("jsonwebtoken");
 
