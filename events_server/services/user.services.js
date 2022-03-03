@@ -1,6 +1,6 @@
 const userModel = require("../models/user.model");
+const { eventsMocks } = require("../mocks/eventsMocks");
 const passwordHash = require('password-hash');
-const { request } = require("express");
 
 exports.createUser = async(email, password) => {
     const user = new userModel({
@@ -14,6 +14,10 @@ exports.createUser = async(email, password) => {
 
 exports.getUsers = async() => {
     return await userModel.find({});
+};
+
+exports.getEvents = async() => {
+    return await eventsMocks.find({});
 };
 
 exports.getUserByEmail = async(email) => {

@@ -3,11 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test": "mocha --timout 10000"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
+    "chai-http": "^4.3.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -19,6 +21,8 @@
     "password-hash": "^1.2.2"
   },
   "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^9.2.1",
     "nodemon": "^2.0.15"
   }
 }
