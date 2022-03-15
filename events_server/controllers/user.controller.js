@@ -33,7 +33,7 @@ exports.loginUser = async (request, response) => {
         {
           user_id: user.id,
           email: request.body.email,
-          roles: [],
+          roles: user.roles,
         },
         process.env.TOKEN_KEY,
         {

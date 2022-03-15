@@ -7,7 +7,6 @@ export default function getUsers(){
 return axios
 .get('users')
 .then((response) => {
-    console.log(response.data);
     return response.data;
 })
 .catch((error) => {

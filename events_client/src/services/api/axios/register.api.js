@@ -7,7 +7,6 @@ export default function registerUser(formValue){
     return axios
     .post('add_user', formValue)
     .then((response) => {
-        console.log(response.data);
     })
     .catch((error) => {
         console.error(error);

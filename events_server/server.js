@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const Router = require("./routes/user.routes");
+const UserRouter = require("./routes/user.routes");
+const EventRouter = require("./routes/events.routes");
 const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -28,7 +29,8 @@ db.once("open", function () {
   console.log("Connected successfully");
 });
 
-app.use(Router);
+app.use(UserRouter);
+app.use(EventRouter);
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
