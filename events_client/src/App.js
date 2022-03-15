@@ -12,10 +12,9 @@ function App() {
 
   useEffect(() => {
     const authKey = sessionStorage.getItem("sessionKey");
-    if (authKey) {
-      const decoded = jwt_decode(authKey);
-      console.log(decoded);
-      const authUser = decoded.user_id;
+    if (authKey && authKey !== "null") {
+      const authUser = jwt_decode(authKey);
+
       if (authUser) {
         setUser(authUser);
       }
@@ -29,14 +28,12 @@ function App() {
 
   return user ? (
     <Routes>
-      <Route 
-        path="/events" 
-        element={<Events logout={logout} user={user}/>} /> 
+      <Route path="/events" element={<Events logout={logout} user={user} />} />
       <Route
         path="/myevents"
         element={<MyEvents logout={logout} user={user} />}
       />
-     </Routes>
+    </Routes>
   ) : (
     <AuthContext.Provider value={{ token, setToken }}>
       <Login storeUser={(userObj) => setUser(userObj)} />

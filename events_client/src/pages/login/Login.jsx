@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Authorization from "../../components/Authorization/Authorization";
 import Registration from "../../components/Registration/Registration";
 import {
@@ -7,14 +7,13 @@ import {
   LoginNavigationBox,
   LoginButton,
 } from "./Login.styled";
-import { AuthContext } from "../../hooks/context";
+// import { AuthContext } from "../../hooks/context";
 
 export default function Login({ storeUser }) {
   const [showRegistration, setShowRegistration] = useState(false);
   const onClick = () => setShowRegistration(!showRegistration);
 
-  const { token } = useContext(AuthContext);
-  console.log(token);
+  // const { token } = useContext(AuthContext);
 
   return (
     <ContainerBox>
