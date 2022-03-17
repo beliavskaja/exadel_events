@@ -18,5 +18,9 @@ exports.createEvent = async (
 };
 
 exports.getEvents = async (skip, limit) => {
-  return await eventModel.find({}).skip(skip).limit(limit);
+  return eventModel.find({}).skip(skip).limit(limit);
+};
+
+exports.countEvents = async () => {
+    return eventModel.find({}).count({});
 };

@@ -21,7 +21,8 @@ exports.getEvents = async (request, response) => {
     const limit = parseInt(request.query.limit);
     const skip = parseInt(request.query.skip);
     const events = await EventServices.getEvents(skip, limit);
-    response.send(events);
+    const total = await EventServices.countEvents();
+    response.send({events, total});
   } catch (error) {
     response.status(500).send(error);
   }
