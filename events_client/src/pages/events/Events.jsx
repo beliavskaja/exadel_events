@@ -9,10 +9,12 @@ import Pagination from "../../components/Pagination/Pagination";
 
 export default function Events({ logout, user }) {
   const [events, setEvents] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const fetchEvents = (skip = 0, limit = 2) => {
     getEvents(skip, limit).then((data) => {
-      setEvents(data);
+      setEvents(data.events);
+      setTotal(data.total);
     });
   };
 
@@ -57,7 +59,7 @@ export default function Events({ logout, user }) {
             </Grid>
           ))}
         </Grid>
-        <Pagination fetchEvents={fetchEvents} />
+        <Pagination total={total} fetchEvents={fetchEvents} />
       </Box>
     </>
   );

@@ -1,23 +1,21 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
-
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const bull = (
   <Box
     component="span"
-    sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
   >
-    •
+    -
   </Box>
 );
 
-export default function EventCard({event}) {
+export default function EventCard({ event }) {
   return (
     <Card sx={{ minWidth: 275, backgroundColor: "#d1ecf8" }}>
       <CardContent>
@@ -25,12 +23,12 @@ export default function EventCard({event}) {
           {event.eventName}
         </Typography>
         <Typography variant="h6" color="text.secondary" component="div">
-          {event.startDate}{bull}{event.endDate}
+          {event.startDate}
+          {bull}
+          {event.endDate}
         </Typography>
-        <Typography>
-          Type: {event.type}
-        </Typography>
-        <Typography variant="body2">
+        <Typography variant="body1">Type: {event.type}</Typography>
+        <Typography variant="body1">
           Description: {event.description}
         </Typography>
       </CardContent>

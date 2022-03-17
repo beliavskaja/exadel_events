@@ -10,7 +10,7 @@ import {
   Pagination,
 } from "@mui/material";
 
-export default function EventsPagination({ fetchEvents }) {
+export default function EventsPagination({ fetchEvents, total }) {
   const [limit, setLimit] = useState(2);
   const [skip, setSkip] = useState(0);
 
@@ -47,7 +47,7 @@ export default function EventsPagination({ fetchEvents }) {
         <Pagination
           onChange={changePage}
           page={(skip + limit) / limit}
-          count={10}
+          count={total / limit}
           color="primary"
         />
       </Stack>
