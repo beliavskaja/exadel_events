@@ -5,6 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import dayjs from "dayjs";
 
 const bull = (
   <Box
@@ -23,12 +24,12 @@ export default function EventCard({ event }) {
           {event.eventName}
         </Typography>
         <Typography variant="h6" color="text.secondary" component="div">
-          {event.startDate}
+          {dayjs(event.startDate).format("D.MM.YYYY")}
           {bull}
-          {event.endDate}
+          {dayjs(event.endDate).format("D.MM.YYYY")}
         </Typography>
-        <Typography variant="body1">Type: {event.type}</Typography>
-        <Typography variant="body1">
+        <Typography>Type: {event.eventType}</Typography>
+        <Typography variant="body2">
           Description: {event.description}
         </Typography>
       </CardContent>

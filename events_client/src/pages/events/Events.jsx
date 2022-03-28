@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import EventCard from "../../components/EventCard/EventCard";
 import getEvents from "../../services/api/axios/getEvents.api";
 import Pagination from "../../components/Pagination/Pagination";
+import NewEventModal from "../../components/NewEventModal/NewEventModal";
 
 export default function Events({ logout, user }) {
   const [events, setEvents] = useState([]);
@@ -38,12 +39,10 @@ export default function Events({ logout, user }) {
         </Button>
       </Header>
       <Box margin={5}>
-        <h2>All Events</h2>
-        {(user.roles || []).includes("ROLE_ADMIN") && (
-          <Button size="small" variant="contained">
-            Create new Event
-          </Button>
-        )}
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <h2>All Events</h2>
+          {(user.roles || []).includes("ROLE_ADMIN") && <NewEventModal />}
+        </Box>
         <Grid container spacing={3} marginTop={1}>
           {events.map((event) => (
             <Grid
