@@ -1,14 +1,24 @@
 import React from "react";
 import { useState } from "react";
-// import { useForm } from "react-hook-form";
-import { Box, Modal, TextField, Button, Select, MenuItem, Typography, IconButton, Stack, FormControl, InputLabel } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import DatePicker from '@mui/lab/DatePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import createEvent from '../../services/api/axios/createEvent.api';
-// import { yupResolver } from '@hookform/resolvers/yup';
-// import * as Yup from 'yup';
+import { useForm } from "react-hook-form";
+import {
+  Box,
+  Modal,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  Typography,
+  IconButton,
+  Stack,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DatePicker from "@mui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import createEvent from "../../services/api/axios/createEvent.api";
 
 const style = {
   position: "absolute",
@@ -26,92 +36,48 @@ const style = {
 
 export default function NewEventModal() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [eventName, setEventName] = useState("");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [description, setDescription] = useState("");
-  const [eventType, setEventType] = useState("");
   const [formValue, setFormValue] = useState({
-    eventName,
-    startDate,
-    endDate,
-    description,
-    eventType
+    eventName: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    description: "",
+    eventType: "",
   });
 
-//   const formSchema = Yup.object().shape({
-//     eventName: Yup.string()
-//       .required("Event name is required"),
-//     startDate: Yup.string()
-//       .required("Start date is required"),
-//     endDate: Yup.string()
-//       .required("End date is required"),
-//     description: Yup.string()
-//       .required("Description is required"),
-//     type: Yup.string()
-//       .required("Type is required"),
-//   });
+  const { handleSubmit, reset } = useForm({
+    defaultValues: {
+      eventName: "",
+      startDate: new Date(),
+      endDate: new Date(),
+      description: "",
+      eventType: "",
+    },
+  });
 
-//   const {
-//     register,
-//     formState: {
-//         errors,
-//         isValid
-//     },
-//     reset,
-// } = useForm({
-//     mode: "onBlur",
-//     resolver: yupResolver(formSchema)
-// });
-
-  const handleEventNameChange = (event) => {
-    setEventName(event.target.value);
+  const handelChange = (event) => {
     setFormValue({
       ...formValue,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
-//   const handleStartDateChange = (event) => {
-//   setFormValue({
-//     ...formValue,
-//     [event.target.name]: event.target.value
-//   });
-//   console.log("b", formValue)
-// };
+  const handelDateChange = (date, name) => {
+    setFormValue({
+      ...formValue,
+      [name]: date,
+    });
+  };
 
-// const handleEndDateChange = (event) => {
-//   setFormValue({
-//     ...formValue,
-//     [event.target.name]: event.target.value
-//   });
-//   console.log("c", formValue)
-// };
-
-const handleDescriptionChange = (event) => {
-  setDescription(event.target.value);
-  setFormValue({
-    ...formValue,
-    [event.target.name]: event.target.value
-  });
-}; 
-
-const handleEventTypeChange = (event) => {
-  setEventType(event.target.value);
-  setFormValue({
-    ...formValue,
-    [event.target.name]: event.target.value
-  });
-}; 
-
-const handleSubmit = (event) => {
+  const onSubmit = (event) => {
     createEvent(formValue);
-    event.preventDefault();
-    // reset();
-}
+    reset();
+  };
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setFormValue({});
+  };
 
   return (
     <div>
@@ -120,88 +86,88 @@ const handleSubmit = (event) => {
       </Button>
       <Modal
         open={open}
-        // onClose={handleClose}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Box display="flex" >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            paddingLeft="10px"
+          >
             <Typography variant="h6">Create new event</Typography>
             <IconButton onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Box>
-          <Stack spacing={2} direction="column">
-            <TextField
-            // {...register('eventName')}
-              required
-              id="event-name"
-              label="Name"
-              name="eventName"
-              value={eventName}
-              onChange={handleEventNameChange}
-            />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-              // {...register('startDate')}
-                label="Start date"
-                name="startDate"
-                value={startDate}
-                onChange={(newStartDate) => {
-                  setStartDate(newStartDate);
-                  setFormValue({
-                    ...formValue, 
-                    startDate: newStartDate
-                  });
-                }}
-                renderInput={(params) => <TextField {...params} />}
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack marginBottom={2} spacing={2} direction="column">
+              <TextField
+                required
+                name="eventName"
+                id="event-name"
+                label="Name"
+                value={formValue.eventName}
+                onChange={handelChange}
               />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-              // {...register('endDate')}
-                label="End date"
-                name="endDate"
-                value={endDate}
-                minDate={startDate}
-                onChange={(newEndDate) => {
-                  setEndDate(newEndDate);
-                  setFormValue({
-                    ...formValue,
-                    endDate: newEndDate
-                  });
-                }}
-                renderInput={(params) => <TextField {...params} />}
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  inputProps={{
+                    required: "required",
+                  }}
+                  name="startDate"
+                  label="Start date *"
+                  value={formValue.startDate}
+                  onChange={(date) => handelDateChange(date, "startDate")}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  inputProps={{
+                    required: "required",
+                  }}
+                  name="endDate"
+                  label="End date *"
+                  value={formValue.endDate}
+                  minDate={formValue.startDate}
+                  onChange={(date) => handelDateChange(date, "endDate")}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+              <TextField
+                required
+                name="description"
+                id="event-description"
+                label="Description"
+                value={formValue.description}
+                onChange={handelChange}
               />
-            </LocalizationProvider>
-            <TextField
-            // {...register('description')}
-              required
-              id="event-description"
-              label="Description"
-              name="description"
-              value={description}
-              onChange={handleDescriptionChange}
-            />
-            <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Type</InputLabel>
-              <Select
-              // {...register('type')}
-                // inputProps={{
-                //   required: "required"
-                // }}
-                id="event-type"
-                name="eventType"
-                value={eventType}
-                label="Type"
-                onChange={handleEventTypeChange}
-              >
-                <MenuItem value={"Online"}>Online</MenuItem>
-                <MenuItem value={"Offline"}>Offline</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-          <Button onClick={handleSubmit} variant="outlined">Save</Button>
+              <FormControl fullWidth>
+                <InputLabel id="eventType-select-label">Type *</InputLabel>
+                <Select
+                  inputProps={{
+                    required: "required",
+                  }}
+                  name="eventType"
+                  id="event-type"
+                  value={formValue.eventType}
+                  label="Type *"
+                  onChange={(event) => handelChange(event)}
+                >
+                  <MenuItem value={"Online"}>Online</MenuItem>
+                  <MenuItem value={"Offline"}>Offline</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+            <Box display="flex" justifyContent="center">
+              <Button variant="contained" type="submit">
+                Save
+              </Button>
+            </Box>
+          </form>
         </Box>
       </Modal>
     </div>
