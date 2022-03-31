@@ -8,7 +8,6 @@ exports.createUser = async(email, password) => {
         roles: ['ROLE_SUBSCRIBER']
     });
     return await user.save();
-    // throw new Error('Sorry, something went wrong');
 };
 
 exports.getUsers = async() => {

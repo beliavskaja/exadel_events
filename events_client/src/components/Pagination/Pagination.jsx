@@ -47,7 +47,7 @@ export default function EventsPagination({ fetchEvents, total }) {
         <Pagination
           onChange={changePage}
           page={(skip + limit) / limit}
-          count={total / limit}
+          count={Math.ceil(total / limit)}
           color="primary"
         />
       </Stack>
