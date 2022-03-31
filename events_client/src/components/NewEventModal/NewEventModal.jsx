@@ -13,15 +13,12 @@ import {
   Stack,
   FormControl,
   InputLabel,
-  Input,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import createEvent from "../../services/api/axios/createEvent.api";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 
 const style = {
   position: "absolute",
@@ -39,45 +36,25 @@ const style = {
 
 export default function NewEventModal() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [formValue, setFormValue] = useState({
     eventName: "",
-    startDate: "",
-    endDate: "",
+    startDate: new Date(),
+    endDate: new Date(),
     description: "",
     eventType: "",
   });
 
-  const formSchema = Yup.object().shape({
-    eventName: Yup.string().required("Event name is required"),
-    // startDate: Yup.string()
-    //   .required("Start date is required"),
-    // endDate: Yup.string()
-    //   .required("End date is required"),
-    description: Yup.string().required("Description is required"),
-    eventType: Yup.string().required("Event type is required"),
-  });
-
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    reset,
-  } = useForm({
-    mode: "onBlur",
-    resolver: yupResolver(formSchema),
+  const { handleSubmit, reset } = useForm({
     defaultValues: {
       eventName: "",
-      startDate: "",
-      endDate: "",
+      startDate: new Date(),
+      endDate: new Date(),
       description: "",
       eventType: "",
     },
   });
 
   const handelChange = (event) => {
-    console.log(event);
     setFormValue({
       ...formValue,
       [event.target.name]: event.target.value,
@@ -85,17 +62,21 @@ export default function NewEventModal() {
   };
 
   const handelDateChange = (date, name) => {
-    console.log(formValue);
     setFormValue({
       ...formValue,
-      [name]: date.toString(),
+      [name]: date,
     });
   };
 
   const onSubmit = (event) => {
-    console.log(formValue);
     createEvent(formValue);
     reset();
+  };
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setFormValue({});
   };
 
   return (
@@ -122,11 +103,8 @@ export default function NewEventModal() {
             </IconButton>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack marginBottom={2} spacing={1} direction="column">
+            <Stack marginBottom={2} spacing={2} direction="column">
               <TextField
-                {...register("eventName", {
-                  required: "Please enter event name",
-                })}
                 required
                 name="eventName"
                 id="event-name"
@@ -134,77 +112,32 @@ export default function NewEventModal() {
                 value={formValue.eventName}
                 onChange={handelChange}
               />
-              <div>
-                {errors?.eventName && (
-                  <p
-                    style={{
-                      height: 10,
-                      margin: "5px",
-                      fontSize: "10px",
-                      color: "red",
-                    }}
-                  >
-                    {errors?.eventName?.message || "Error!"}
-                  </p>
-                )}
-              </div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  {...register("startDate", {
-                    required: "Please enter event name",
-                  })}
+                  inputProps={{
+                    required: "required",
+                  }}
                   name="startDate"
-                  label="Start date"
+                  label="Start date *"
                   value={formValue.startDate}
                   onChange={(date) => handelDateChange(date, "startDate")}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
-              <div>
-                {errors?.startDate && (
-                  <p
-                    style={{
-                      height: 10,
-                      margin: "5px",
-                      fontSize: "10px",
-                      color: "red",
-                    }}
-                  >
-                    {errors?.startDate?.message || "Error!"}
-                  </p>
-                )}
-              </div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  {...register("endDate", {
-                    required: "Please enter event name",
-                  })}
+                  inputProps={{
+                    required: "required",
+                  }}
                   name="endDate"
-                  label="End date"
+                  label="End date *"
                   value={formValue.endDate}
                   minDate={formValue.startDate}
                   onChange={(date) => handelDateChange(date, "endDate")}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
-              <div>
-                {errors?.endDate && (
-                  <p
-                    style={{
-                      height: 10,
-                      margin: "5px",
-                      fontSize: "10px",
-                      color: "red",
-                    }}
-                  >
-                    {errors?.endDate?.message || "Error!"}
-                  </p>
-                )}
-              </div>
               <TextField
-                {...register("description", {
-                  required: "Please enter event name",
-                })}
                 required
                 name="description"
                 id="event-description"
@@ -212,53 +145,28 @@ export default function NewEventModal() {
                 value={formValue.description}
                 onChange={handelChange}
               />
-              <div>
-                {errors?.description && (
-                  <p
-                    style={{
-                      height: 10,
-                      margin: "5px",
-                      fontSize: "10px",
-                      color: "red",
-                    }}
-                  >
-                    {errors?.description?.message || "Error!"}
-                  </p>
-                )}
-              </div>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                <InputLabel id="eventType-select-label">Type *</InputLabel>
                 <Select
-                  {...register("eventType", {
-                    required: "Please enter event name",
-                  })}
-                  required
+                  inputProps={{
+                    required: "required",
+                  }}
                   name="eventType"
                   id="event-type"
                   value={formValue.eventType}
-                  label="Type"
+                  label="Type *"
                   onChange={(event) => handelChange(event)}
                 >
                   <MenuItem value={"Online"}>Online</MenuItem>
                   <MenuItem value={"Offline"}>Offline</MenuItem>
                 </Select>
               </FormControl>
-              <div>
-                {errors?.eventType && (
-                  <p
-                    style={{
-                      height: 10,
-                      margin: "5px",
-                      fontSize: "10px",
-                      color: "red",
-                    }}
-                  >
-                    {errors?.eventType?.message || "Error!"}
-                  </p>
-                )}
-              </div>
             </Stack>
-            <Input type="submit" value={"Save"}></Input>
+            <Box display="flex" justifyContent="center">
+              <Button variant="contained" type="submit">
+                Save
+              </Button>
+            </Box>
           </form>
         </Box>
       </Modal>

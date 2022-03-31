@@ -13,11 +13,10 @@ import { useNavigate } from "react-router-dom";
 export default function Authorization({ storeUser }) {
   const {
     register,
-    formState: { errors, isValid },
     reset,
   } = useForm();
 
-  const [formValue, setformValue] = useState({
+  const [formValue, setFormValue] = useState({
     email: "",
     password: "",
   });
@@ -38,7 +37,7 @@ export default function Authorization({ storeUser }) {
   };
 
   const handleChange = (event) => {
-    setformValue({
+    setFormValue({
       ...formValue,
       [event.target.name]: event.target.value,
     });
