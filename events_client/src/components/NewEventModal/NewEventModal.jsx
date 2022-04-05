@@ -41,13 +41,23 @@ const style = {
 export default function NewEventModal() {
   const [open, setOpen] = useState(false);
 
+  const today = new Date();
+
   const formSchema = Yup.object().shape({
     eventName: Yup.string()
       .required("Event name is required")
       .min(3, "Event name length should be at least 3 characters")
       .max(50, "Event name cannot exceed more than 50 characters"),
-    startDate: Yup.string().required("Start date is required"),
-    endDate: Yup.string().required("End date is required"),
+    startDate: Yup.date()
+      .required("Start date is required")
+      .min(today, "Date cannot be in the past"),
+    endDate: Yup.date()
+      .required("End date is required")
+      .when(
+        "startDate",
+        (startDate, formSchema) => startDate && formSchema.min(startDate),
+        "End date cannot be less than start date"
+      ),
     description: Yup.string()
       .required("Description is required")
       .min(5, "Description length should be at least 5 characters")
@@ -70,8 +80,8 @@ export default function NewEventModal() {
     },
     defaultValues: {
       eventName: "",
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: {},
+      endDate: {},
       description: "",
       eventType: "",
     },
@@ -192,7 +202,6 @@ export default function NewEventModal() {
                       }}
                       name="endDate"
                       label="End date *"
-                      minDate={parseISO(getValues("startDate"))}
                       value={value}
                       onChange={(value) =>
                         onChange(dayjs(value).format("YYYY-MM-DD"))
