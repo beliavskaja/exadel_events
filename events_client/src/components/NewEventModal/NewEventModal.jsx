@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import {
   Box,
   Modal,
@@ -19,6 +19,10 @@ import DatePicker from "@mui/lab/DatePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import createEvent from "../../services/api/axios/createEvent.api";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import dayjs from "dayjs";
+import { parseISO } from "date-fns";
 
 const style = {
   position: "absolute",
@@ -36,47 +40,62 @@ const style = {
 
 export default function NewEventModal() {
   const [open, setOpen] = useState(false);
-  const [formValue, setFormValue] = useState({
-    eventName: "",
-    startDate: new Date(),
-    endDate: new Date(),
-    description: "",
-    eventType: "",
+
+  const today = new Date();
+
+  const formSchema = Yup.object().shape({
+    eventName: Yup.string()
+      .required("Event name is required")
+      .min(3, "Event name length should be at least 3 characters")
+      .max(50, "Event name cannot exceed more than 50 characters"),
+    startDate: Yup.date()
+      .required("Start date is required")
+      .min(today, "Date cannot be in the past"),
+    endDate: Yup.date()
+      .required("End date is required")
+      .when(
+        "startDate",
+        (startDate, formSchema) => startDate && formSchema.min(startDate),
+        "End date cannot be less than start date"
+      ),
+    description: Yup.string()
+      .required("Description is required")
+      .min(5, "Description length should be at least 5 characters")
+      .max(300, "Description cannot exceed more than 300 characters"),
+    eventType: Yup.string().required("Event type is required"),
   });
 
-  const { handleSubmit, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    resolver: async (data, context, options) => {
+      return yupResolver(formSchema)(data, context, options);
+    },
     defaultValues: {
       eventName: "",
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: {},
+      endDate: {},
       description: "",
       eventType: "",
     },
   });
 
-  const handelChange = (event) => {
-    setFormValue({
-      ...formValue,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handelDateChange = (date, name) => {
-    setFormValue({
-      ...formValue,
-      [name]: date,
-    });
-  };
-
-  const onSubmit = (event) => {
-    createEvent(formValue);
+  const onSubmit = (data) => {
+    createEvent(data);
     reset();
   };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
+    reset();
     setOpen(false);
-    setFormValue({});
   };
 
   return (
@@ -103,64 +122,183 @@ export default function NewEventModal() {
             </IconButton>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack marginBottom={2} spacing={2} direction="column">
+            <Stack marginBottom={2} spacing={1} direction="column">
               <TextField
                 required
                 name="eventName"
                 id="event-name"
                 label="Name"
-                value={formValue.eventName}
-                onChange={handelChange}
+                {...register("eventName")}
               />
+              <div>
+                {errors?.eventName && (
+                  <p
+                    style={{
+                      height: 10,
+                      margin: "5px",
+                      fontSize: "10px",
+                      color: "red",
+                    }}
+                  >
+                    {errors?.eventName?.message || "Error!"}
+                  </p>
+                )}
+              </div>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  inputProps={{
-                    required: "required",
-                  }}
+                <Controller
                   name="startDate"
-                  label="Start date *"
-                  value={formValue.startDate}
-                  onChange={(date) => handelDateChange(date, "startDate")}
-                  renderInput={(params) => <TextField {...params} />}
+                  control={control}
+                  defaultValue={null}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <DatePicker
+                      inputProps={{
+                        required: "required",
+                      }}
+                      name="startDate"
+                      label="Start date *"
+                      value={value}
+                      onChange={(value) => {
+                        onChange(dayjs(value).format("YYYY-MM-DD"));
+                        console.log(getValues("startDate"));
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          helperText={invalid ? error.massage : null}
+                          {...params}
+                          error={invalid}
+                        />
+                      )}
+                    />
+                  )}
                 />
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  inputProps={{
-                    required: "required",
-                  }}
+                <div>
+                  {errors?.startDate && (
+                    <p
+                      style={{
+                        height: 10,
+                        margin: "5px",
+                        fontSize: "10px",
+                        color: "red",
+                      }}
+                    >
+                      {errors?.startDate?.message || "Error!"}
+                    </p>
+                  )}
+                </div>
+                <Controller
                   name="endDate"
-                  label="End date *"
-                  value={formValue.endDate}
-                  minDate={formValue.startDate}
-                  onChange={(date) => handelDateChange(date, "endDate")}
-                  renderInput={(params) => <TextField {...params} />}
+                  control={control}
+                  defaultValue={parseISO(getValues("startDate"))}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <DatePicker
+                      inputProps={{
+                        required: "required",
+                      }}
+                      name="endDate"
+                      label="End date *"
+                      value={value}
+                      onChange={(value) =>
+                        onChange(dayjs(value).format("YYYY-MM-DD"))
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          helperText={invalid ? error.massage : null}
+                          {...params}
+                          error={invalid}
+                        />
+                      )}
+                    />
+                  )}
                 />
+                <div>
+                  {errors?.endDate && (
+                    <p
+                      style={{
+                        height: 10,
+                        margin: "5px",
+                        fontSize: "10px",
+                        color: "red",
+                      }}
+                    >
+                      {errors?.endDate?.message || "Error!"}
+                    </p>
+                  )}
+                </div>
               </LocalizationProvider>
               <TextField
                 required
                 name="description"
                 id="event-description"
                 label="Description"
-                value={formValue.description}
-                onChange={handelChange}
+                {...register("description")}
               />
+              <div>
+                {errors?.description && (
+                  <p
+                    style={{
+                      height: 10,
+                      margin: "5px",
+                      fontSize: "10px",
+                      color: "red",
+                    }}
+                  >
+                    {errors?.description?.message || "Error!"}
+                  </p>
+                )}
+              </div>
               <FormControl fullWidth>
                 <InputLabel id="eventType-select-label">Type *</InputLabel>
-                <Select
-                  inputProps={{
-                    required: "required",
-                  }}
+                <Controller
                   name="eventType"
-                  id="event-type"
-                  value={formValue.eventType}
-                  label="Type *"
-                  onChange={(event) => handelChange(event)}
-                >
-                  <MenuItem value={"Online"}>Online</MenuItem>
-                  <MenuItem value={"Offline"}>Offline</MenuItem>
-                </Select>
+                  control={control}
+                  defaultValue={null}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error, invalid },
+                  }) => (
+                    <Select
+                      inputProps={{
+                        required: "required",
+                      }}
+                      name="eventType"
+                      id="event-type"
+                      label="Type *"
+                      value={value}
+                      onChange={(value) => onChange(value)}
+                      renderInput={(params) => (
+                        <TextField
+                          helperText={invalid ? error.massage : null}
+                          {...params}
+                          error={invalid}
+                        />
+                      )}
+                    >
+                      <MenuItem value={"Online"}>Online</MenuItem>
+                      <MenuItem value={"Offline"}>Offline</MenuItem>
+                    </Select>
+                  )}
+                />
               </FormControl>
+              <div>
+                {errors?.eventType && (
+                  <p
+                    style={{
+                      height: 10,
+                      margin: "5px",
+                      fontSize: "10px",
+                      color: "red",
+                    }}
+                  >
+                    {errors?.eventType?.message || "Error!"}
+                  </p>
+                )}
+              </div>
             </Stack>
             <Box display="flex" justifyContent="center">
               <Button variant="contained" type="submit">
