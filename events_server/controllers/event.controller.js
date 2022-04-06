@@ -1,7 +1,12 @@
 const EventServices = require("../services/event.services");
+const { validationResult } = require('express-validator');
 
 exports.addEvents = async (request, response) => {
   try {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ errors: errors.array() });
+    }
     const newEvent = await EventServices.createEvent(
       request.body.eventName,
       request.body.startDate,
