@@ -23,6 +23,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import dayjs from "dayjs";
 import { parseISO } from "date-fns";
+import countries from "i18n-iso-countries";
+import enLocate from "i18n-iso-countries/langs/en.json";
 
 const style = {
   position: "absolute",
@@ -42,7 +44,14 @@ export default function NewEventModal() {
   const [open, setOpen] = useState(false);
 
   const today = new Date();
-
+  countries.registerLocale(enLocate);
+  const countryObj = countries.getNames("en", { select: "official" });
+  const countryArr = Object.entries(countryObj).map(([key, value]) => {
+    return {
+      label: value,
+      value: key,
+    };
+  });
   const formSchema = Yup.object().shape({
     eventName: Yup.string()
       .min(3, "Event name length should be at least 3 characters")
@@ -69,6 +78,7 @@ export default function NewEventModal() {
     register,
     handleSubmit,
     reset,
+    watch,
     control,
     getValues,
     formState: { errors },
@@ -84,6 +94,7 @@ export default function NewEventModal() {
       endDate: {},
       description: "",
       eventType: "",
+      location: "",
     },
   });
 
@@ -299,6 +310,45 @@ export default function NewEventModal() {
                   </p>
                 )}
               </div>
+              {watch("eventType") === "Offline" && (
+                <FormControl fullWidth>
+                  <InputLabel id="location-select-label">Location *</InputLabel>
+                  <Controller
+                    name="location"
+                    control={control}
+                    defaultValue={null}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error, invalid },
+                    }) => (
+                      <Select
+                        inputProps={{
+                          required: "required",
+                        }}
+                        name="location"
+                        id="location"
+                        label="Location *"
+                        value={value}
+                        onChange={(value) => onChange(value)}
+                        // renderInput={(params) => (
+                        //   <TextField
+                        //     helperText={invalid ? error.massage : null}
+                        //     {...params}
+                        //     error={invalid}
+                        //   />
+                        // )}
+                      >
+                        {!!countryArr?.length &&
+                          countryArr.map(({ label, value }) => (
+                            <MenuItem key={value} value={label}>
+                              {label}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
+              )}
             </Stack>
             <Box display="flex" justifyContent="center">
               <Button variant="contained" type="submit">
