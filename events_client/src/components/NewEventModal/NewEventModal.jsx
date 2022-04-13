@@ -45,23 +45,23 @@ export default function NewEventModal() {
 
   const formSchema = Yup.object().shape({
     eventName: Yup.string()
-      .required("Event name is required")
       .min(3, "Event name length should be at least 3 characters")
-      .max(50, "Event name cannot exceed more than 50 characters"),
+      .max(50, "Event name cannot exceed more than 50 characters")
+      .required("Event name is required"),
     startDate: Yup.date()
-      .required("Start date is required")
-      .min(today, "Date cannot be in the past"),
+      .min(today, "Date cannot be in the past")
+      .required("Start date is required"),
     endDate: Yup.date()
-      .required("End date is required")
       .when(
         "startDate",
         (startDate, formSchema) => startDate && formSchema.min(startDate),
         "End date cannot be less than start date"
-      ),
+      )
+      .required("End date is required"),
     description: Yup.string()
-      .required("Description is required")
       .min(5, "Description length should be at least 5 characters")
-      .max(300, "Description cannot exceed more than 300 characters"),
+      .max(300, "Description cannot exceed more than 300 characters")
+      .required("Description is required"),
     eventType: Yup.string().required("Event type is required"),
   });
 

@@ -18,7 +18,7 @@ const bull = (
 
 export default function EventCard({ event }) {
   return (
-    <Card sx={{ minWidth: 275, backgroundColor: "#d1ecf8" }}>
+    <Card sx={{ minWidth: 250, backgroundColor: "#d1ecf8" }}>
       <CardContent>
         <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
           {event.eventName}

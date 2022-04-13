@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 export default function EventsPagination({ fetchEvents, total }) {
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
   const [skip, setSkip] = useState(0);
 
   const handleChange = (event) => {
@@ -26,23 +26,13 @@ export default function EventsPagination({ fetchEvents, total }) {
   };
 
   return (
-    <Box sx={{ minWidth: 120 }} marginTop="20px">
-      <Box maxWidth={130}>
-        <FormControl fullWidth>
-          <InputLabel id="select-label">Page size</InputLabel>
-          <Select
-            labelId="select-label"
-            id="select"
-            value={limit}
-            label="Page size"
-            onChange={handleChange}
-          >
-            <MenuItem value={1}>1</MenuItem>
-            <MenuItem value={2}>2</MenuItem>
-            <MenuItem value={4}>4</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+    <Box
+      sx={{ minWidth: 120 }}
+      marginTop="20px"
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+    >
       <Stack marginTop={3} spacing={2}>
         <Pagination
           onChange={changePage}
@@ -51,6 +41,23 @@ export default function EventsPagination({ fetchEvents, total }) {
           color="primary"
         />
       </Stack>
+      <Box maxWidth={130}>
+        <FormControl fullWidth>
+          <InputLabel id="select-label">Page size</InputLabel>
+          <Select
+            size="small"
+            labelId="select-label"
+            id="select"
+            value={limit}
+            label="Page size"
+            onChange={handleChange}
+          >
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={30}>30</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
     </Box>
   );
 }
