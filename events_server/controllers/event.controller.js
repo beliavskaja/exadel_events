@@ -12,7 +12,8 @@ exports.addEvents = async (request, response) => {
       request.body.startDate,
       request.body.endDate,
       request.body.description,
-      request.body.eventType
+      request.body.eventType,
+      request.body.location
     );
     response.send(newEvent);
   } catch (error) {

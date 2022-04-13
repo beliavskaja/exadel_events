@@ -24,15 +24,9 @@ export default function Events({ logout, user }) {
 
   return (
     <>
-      <Header logout={logout}/>
+      <Header logout={logout} />
       <Box marginLeft="10%" marginRight="10%" marginTop="74px" padding={1}>
-        <Box
-          paddingLeft={3}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <h2>All Events</h2>
+        <Box display="flex" justifyContent="end" margin={2}>
           {(user.roles || []).includes("ROLE_ADMIN") && <NewEventModal />}
         </Box>
         <Grid container spacing={3}>

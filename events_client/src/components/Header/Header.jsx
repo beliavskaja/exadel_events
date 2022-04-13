@@ -85,7 +85,7 @@ export default function Header({ logout }) {
               variant="outlined"
               onClick={() => logout()}
             >
-              Logout{<LogoutIcon style={{marginLeft: 5}}/>}
+              Logout{<LogoutIcon style={{ marginLeft: 5 }} />}
             </LogoutButton>
           </Box>
         </Box>

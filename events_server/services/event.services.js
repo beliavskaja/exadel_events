@@ -5,7 +5,8 @@ exports.createEvent = async (
   startDate,
   endDate,
   description,
-  eventType
+  eventType,
+  location
 ) => {
   const event = new eventModel({
     eventName,
@@ -13,6 +14,7 @@ exports.createEvent = async (
     endDate,
     description,
     eventType,
+    location,
   });
   return await event.save();
 };
