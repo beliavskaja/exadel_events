@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   Box,
   FormControl,
-  InputLabel,
+  Typography,
   Select,
   MenuItem,
   Stack,
@@ -33,7 +33,7 @@ export default function EventsPagination({ fetchEvents, total }) {
       justifyContent="space-between"
       alignItems="center"
     >
-      <Stack marginTop={3} spacing={2}>
+      <Stack spacing={2}>
         <Pagination
           onChange={changePage}
           page={(skip + limit) / limit}
@@ -41,22 +41,24 @@ export default function EventsPagination({ fetchEvents, total }) {
           color="primary"
         />
       </Stack>
-      <Box maxWidth={130}>
-        <FormControl fullWidth>
-          <InputLabel id="select-label">Page size</InputLabel>
-          <Select
-            size="small"
-            labelId="select-label"
-            id="select"
-            value={limit}
-            label="Page size"
-            onChange={handleChange}
-          >
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={20}>20</MenuItem>
-            <MenuItem value={30}>30</MenuItem>
-          </Select>
-        </FormControl>
+      <Box display="flex" alignItems="center">
+        <Typography variant="body2" marginRight={1}>
+          Page size
+        </Typography>
+        <Box maxWidth={190}>
+          <FormControl fullWidth>
+            <Select
+              size="small"
+              id="select"
+              value={limit}
+              onChange={handleChange}
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={30}>30</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
       </Box>
     </Box>
   );

@@ -61,10 +61,9 @@ export default function NewEventModal() {
       .min(today, "Date cannot be in the past")
       .required("Start date is required"),
     endDate: Yup.date()
-      .when(
-        "startDate",
-        (startDate, formSchema) => startDate && formSchema.min(startDate),
-        "End date cannot be less than start date"
+    .min(
+       Yup.ref("startDate"),
+       "End date has to be more than start date"
       )
       .required("End date is required"),
     description: Yup.string()
@@ -72,6 +71,8 @@ export default function NewEventModal() {
       .max(300, "Description cannot exceed more than 300 characters")
       .required("Description is required"),
     eventType: Yup.string().required("Event type is required"),
+    // location: Yup.string()
+    // .required("Event location is required"),
   });
 
   const {
@@ -99,6 +100,7 @@ export default function NewEventModal() {
   });
 
   const onSubmit = (data) => {
+    console.log(data);
     createEvent(data);
     reset();
   };
@@ -173,7 +175,6 @@ export default function NewEventModal() {
                       value={value}
                       onChange={(value) => {
                         onChange(dayjs(value).format("YYYY-MM-DD"));
-                        console.log(getValues("startDate"));
                       }}
                       renderInput={(params) => (
                         <TextField
@@ -203,6 +204,7 @@ export default function NewEventModal() {
                   name="endDate"
                   control={control}
                   defaultValue={parseISO(getValues("startDate"))}
+                  minDate={getValues("startDate")}
                   render={({
                     field: { onChange, value },
                     fieldState: { error, invalid },
@@ -330,13 +332,13 @@ export default function NewEventModal() {
                         label="Location *"
                         value={value}
                         onChange={(value) => onChange(value)}
-                        // renderInput={(params) => (
-                        //   <TextField
-                        //     helperText={invalid ? error.massage : null}
-                        //     {...params}
-                        //     error={invalid}
-                        //   />
-                        // )}
+                        renderInput={(params) => (
+                          <TextField
+                            helperText={invalid ? error.massage : null}
+                            {...params}
+                            error={invalid}
+                          />
+                        )}
                       >
                         {!!countryArr?.length &&
                           countryArr.map(({ label, value }) => (
