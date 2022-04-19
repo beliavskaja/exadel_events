@@ -16,12 +16,15 @@ const bull = (
 
 export default function EventCard({ event }) {
   return (
-    <Card sx={{ minWidth: 250, minHeight: 300, backgroundColor: "#d1ecf8" }}>
+    <Card sx={{ minWidth: 250, minHeight: 300, position: "relative", backgroundColor: "#d1ecf8" }}>
       <Box
         display="flex"
         flexDirection="column"
-        justifyContent="space-between"
         padding={2}
+        position="absolute"
+        top="0"
+        bottom="0"
+        justifyContent="space-between"
       >
         <Box>
           <Typography sx={{ fontSize: 26 }} color="text.secondary">
@@ -36,12 +39,12 @@ export default function EventCard({ event }) {
             Description: {event.description}
           </Typography>
         </Box>
-        <Box display="flex" flexDirection="column">
-          <Typography marginTop={2}>Type: {event.eventType}</Typography>
+        <Box display="flex" flexDirection="column" justifyContent="flex-start" alignItems="flex-start">
+          <Typography variant="body2" marginTop={2}>Type: {event.eventType}</Typography>
           {!!event.location && (
-            <Typography marginTop={2}>Location: {event.location}</Typography>
+            <Typography variant="body2" marginTop={0.5}>Location: {event.location}</Typography>
           )}
-          <Button size="small">Register</Button>
+          <Button sx={{marginTop: 1}} variant="outlined" size="small">Register</Button>
         </Box>
       </Box>
     </Card>
